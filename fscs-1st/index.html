@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鳳中電資 第一節社課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f17;
+    --card: #161825;
+    --line: #2a2d40;
+    --ink: #eef0f5;
+    --muted: #a9aec0;
+    --purple: oklch(0.78 0.13 290);
+    --green: oklch(0.76 0.14 150);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow: hidden;
+  }
+  a { color: var(--purple); }
+  a:hover { color: var(--ink); }
+
+  main {
+    height: 100vh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  main::-webkit-scrollbar { display: none; }
+  section {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10vh 8vw;
+    gap: 5vh;
+  }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+  section.active .reveal { opacity: 1; transform: none; }
+  section.active .reveal:nth-child(2) { transition-delay: .1s; }
+  section.active .reveal:nth-child(3) { transition-delay: .2s; }
+
+  .tag { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.4vw, 24px); letter-spacing: .2em; color: var(--purple); }
+  h1 { margin: 0; font-size: clamp(56px, 8vw, 150px); font-weight: 900; line-height: 1.05; }
+  h2 { margin: 0; font-size: clamp(40px, 4.5vw, 84px); font-weight: 700; }
+  .lead { margin: 0; font-size: clamp(18px, 2vw, 38px); font-weight: 300; line-height: 1.6; color: var(--muted); max-width: 1200px; text-wrap: pretty; }
+  .head { display: flex; flex-direction: column; gap: 16px; }
+
+  /* cover */
+  .cover { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 6vw; }
+  .cover-text { display: flex; flex-direction: column; gap: 4vh; }
+  .sub { display: flex; align-items: center; gap: 24px; font-size: clamp(24px, 3vw, 56px); font-weight: 300; letter-spacing: .12em; }
+  .sub::before { content: ""; width: 70px; height: 3px; background: var(--green); }
+  .logo { width: min(36vw, 560px); aspect-ratio: 1; border-radius: 32px; justify-self: center; box-shadow: 0 40px 120px rgba(120, 90, 255, .2); }
+
+  /* people */
+  .person { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 5vw; }
+  .person.flip { grid-template-columns: minmax(0, 1fr) auto; }
+  .person.flip .photo { order: 2; justify-self: end; }
+  .person-text { display: flex; flex-direction: column; gap: 4vh; padding: 0 5vw 0 0; }
+  .person.flip .person-text { padding: 0 8vw 0 5vw; justify-self: end; }
+  section:has(.person) { padding: 3vh max(3vw, 56px); }
+  section:has(.person:not(.flip)) { padding-left: 10vw; }
+  section:has(.person.flip) { padding-right: 10vw; }
+  .photo { height: 94vh; width: auto; max-width: 100%; aspect-ratio: 2 / 3; object-fit: cover; object-position: center 25%; border-radius: 24px; justify-self: start; box-shadow: 0 40px 120px rgba(120, 90, 255, .2); }
+  .person-title { display: flex; align-items: center; flex-wrap: wrap; gap: 24px 32px; }
+  .person-name { display: flex; align-items: center; gap: 24px; font-size: clamp(28px, 3.4vw, 64px); font-weight: 300; letter-spacing: .12em; }
+  .person-name::before { content: ""; width: 70px; height: 3px; background: var(--green); }
+
+  .info { display: flex; flex-direction: column; gap: 16px; }
+  .info-label { font-family: 'JetBrains Mono', monospace; font-size: clamp(13px, 1.1vw, 20px); letter-spacing: .2em; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 12px; }
+  .chips span { padding: 8px 20px; border: 1px solid var(--purple); border-radius: 999px; color: var(--purple); font-size: clamp(15px, 1.4vw, 26px); }
+  .feats { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .feats li { display: flex; gap: 16px; font-size: clamp(16px, 1.6vw, 30px); font-weight: 300; line-height: 1.5; }
+  .feats li::before { content: "▸"; color: var(--green); }
+
+  /* community */
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4vw; }
+  .social { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+  .qr {
+    width: 100%; max-width: 340px; aspect-ratio: 1; border-radius: 20px;
+    border: 1px dashed var(--line); background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--muted); overflow: hidden;
+  }
+  .qr:has(img) { background: #fff; border: 0; padding: 12px; }
+  .qr img { width: 100%; height: 100%; object-fit: contain; }
+  .social .name { font-size: clamp(24px, 2.4vw, 44px); font-weight: 700; }
+  .social .desc { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.2vw, 22px); color: var(--muted); }
+
+  /* classes */
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3vw; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: clamp(28px, 4vw, 72px); display: flex; flex-direction: column; gap: 24px; transition: transform .3s, border-color .3s; }
+  .card:hover { transform: translateY(-6px); border-color: var(--purple); }
+  .card .code { font-family: 'JetBrains Mono', monospace; font-size: clamp(16px, 1.5vw, 28px); }
+  .card .title { font-size: clamp(36px, 4vw, 72px); font-weight: 700; }
+  .card p { margin: 0; font-size: clamp(16px, 1.8vw, 34px); font-weight: 300; line-height: 1.6; color: var(--muted); }
+
+  /* schedule */
+  .weeks { row-gap: 5vh; }
+  .week { display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--line); padding-top: 28px; }
+  .week .num { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 1.3vw, 24px); letter-spacing: .1em; color: var(--green); }
+  .week .title { font-size: clamp(22px, 2.4vw, 46px); font-weight: 700; line-height: 1.4; }
+  .week p { margin: 0; font-size: clamp(15px, 1.5vw, 28px); font-weight: 300; line-height: 1.6; color: var(--muted); }
+  .weeks.stagger { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .weeks.stagger .week { grid-column: span 2; }
+  .weeks.stagger .week:nth-child(4) { grid-column: 2 / span 2; }
+
+  /* prep */
+  .prep { display: flex; flex-direction: column; gap: 20px; border-top: 2px solid var(--green); padding-top: 36px; }
+  .prep .num { font-family: 'JetBrains Mono', monospace; font-size: clamp(36px, 4vw, 72px); color: var(--green); }
+  .prep .title { font-size: clamp(26px, 2.8vw, 52px); font-weight: 700; }
+  .prep p { margin: 0; font-size: clamp(15px, 1.8vw, 34px); font-weight: 300; line-height: 1.6; color: var(--muted); }
+
+  /* fee */
+  .fee { display: flex; align-items: baseline; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: clamp(80px, 11vw, 200px); font-weight: 500; line-height: 1; color: var(--green); }
+  .fee small { font-family: 'Noto Sans TC', sans-serif; font-size: .3em; font-weight: 300; color: var(--muted); }
+
+  /* form */
+  .form { align-items: center; text-align: center; }
+  .form .head { align-items: center; }
+  .qr.big { width: min(56vh, 80vw); max-width: none; }
+
+  /* end */
+  .end { align-items: center; text-align: center; }
+  .end .logo { width: min(20vw, 260px); box-shadow: none; }
+
+  /* nav */
+  nav { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 14px; z-index: 10; }
+  nav button { width: 10px; height: 10px; border-radius: 50%; border: 0; padding: 0; background: var(--line); cursor: pointer; transition: background .3s, transform .3s; }
+  nav button.on { background: var(--purple); transform: scale(1.4); }
+  .counter { position: fixed; left: 28px; bottom: 24px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--muted); letter-spacing: .15em; }
+
+  @media (max-width: 800px) {
+    .cover, .grid2, .grid3, .person, .person.flip, .weeks.stagger { grid-template-columns: 1fr; }
+    .weeks.stagger .week, .weeks.stagger .week:nth-child(4) { grid-column: auto; }
+    .person.flip .photo { order: 0; }
+    .photo, .person.flip .photo { justify-self: center; }
+    .person-text, .person.flip .person-text { padding: 0; }
+    section:has(.person:not(.flip)) { padding-left: max(3vw, 56px); }
+    section:has(.person.flip) { padding-right: max(3vw, 56px); }
+    .person.flip .person-text { justify-self: stretch; }
+    .photo { width: 70vw; height: auto; }
+    .logo { width: 60vw; }
+    section { padding: 12vh 7vw; }
+    nav { right: 12px; }
+  }
+</style>
+</head>
+<body>
+<main id="main">
+
+  <section class="cover">
+    <div class="cover-text">
+      <div class="tag reveal">FSCS · 2026</div>
+      <h1 class="reveal">鳳中電資</h1>
+      <div class="sub reveal">第一節社課</div>
+    </div>
+    <img class="logo reveal" src="assets/fscs-logo.jpg" alt="FsCs">
+  </section>
+
+  <section>
+    <div class="tag reveal">01 — WELCOME</div>
+    <h1 class="reveal">歡迎加入鳳中電資</h1>
+    <p class="lead reveal">從程式、硬體到資訊安全，一起動手做出有趣的東西。</p>
+  </section>
+
+  <section>
+    <div class="person">
+      <img class="photo reveal" src="assets/boss.jpg" alt="社長">
+      <div class="person-text reveal">
+        <div class="tag">02 — PRESIDENT</div>
+        <div class="person-title">
+          <h2>社長</h2>
+          <div class="person-name">高大崴</div>
+        </div>
+        <div class="info">
+          <div class="info-label">SKILLS</div>
+          <div class="chips"><span>全棧開發</span><span>Python</span><span>嵌入式開發</span></div>
+        </div>
+        <div class="info">
+          <div class="info-label">EXPERIENCE</div>
+          <ul class="feats">
+            <li>鳳中多項校務系統維運</li>
+            <li>2025 國際創新發明競賽 金牌暨全組別冠軍</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="person flip">
+      <img class="photo reveal" src="assets/teach.jpg" alt="教學">
+      <div class="person-text reveal">
+        <div class="tag">03 — TEACHER</div>
+        <div class="person-title">
+          <h2>教學</h2>
+          <div class="person-name">歐洵愷</div>
+        </div>
+        <div class="info">
+          <div class="info-label">SKILLS</div>
+          <div class="chips"><span>C++</span><span>半場三分</span></div>
+        </div>
+        <div class="info">
+          <div class="info-label">EXPERIENCE</div>
+          <ul class="feats">
+            <li>FRC</li>
+            <li>鳳中能競選手</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head reveal">
+      <div class="tag">04 — COMMUNITY</div>
+      <h2>加入社群</h2>
+    </div>
+    <div class="grid3 reveal">
+      <div class="social">
+        <div class="qr" data-src="assets/line.jpg">LINE QR</div>
+        <div class="name">LINE</div>
+        <div class="desc">社團公告</div>
+      </div>
+      <div class="social">
+        <div class="qr" data-src="assets/ig.fssh.cs.club_qr.png">IG QR</div>
+        <div class="name">Instagram</div>
+        <div class="desc">活動紀錄</div>
+      </div>
+      <div class="social">
+        <div class="qr" data-src="assets/qrcode_discord.gg.png">DISCORD QR</div>
+        <div class="name">Discord</div>
+        <div class="desc">課程討論</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head reveal">
+      <div class="tag">05 — CLASSES</div>
+      <h2>分班介紹</h2>
+    </div>
+    <div class="grid2 reveal">
+      <div class="card">
+        <div class="code" style="color: var(--green)">CLASS A</div>
+        <div class="title">基礎班</div>
+        <p>零基礎入門，從 C++ 開始學程式。</p>
+      </div>
+      <div class="card">
+        <div class="code" style="color: var(--purple)">CLASS B</div>
+        <div class="title">進階班</div>
+        <p></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head reveal">
+      <div class="tag">06 — SCHEDULE</div>
+      <h2>基礎班課程安排</h2>
+    </div>
+    <div class="grid3 weeks reveal">
+      <div class="week"><div class="num">WEEK 01</div><div class="title">介紹・Hello World</div></div>
+      <div class="week"><div class="num">WEEK 02</div><div class="title">變數・輸出輸入</div></div>
+      <div class="week"><div class="num">WEEK 03</div><div class="title">四則運算・if else</div></div>
+      <div class="week"><div class="num">WEEK 04</div><div class="title">陣列（～可變）・迴圈</div></div>
+      <div class="week"><div class="num">WEEK 05</div><div class="title">函式・遞迴</div></div>
+      <div class="week"><div class="num">WEEK 06</div><div class="title">排序</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head reveal">
+      <div class="tag">06 — SCHEDULE</div>
+      <h2>進階班課程</h2>
+    </div>
+    <div class="grid3 weeks stagger reveal">
+      <div class="week"><div class="num">TOPIC 01</div><div class="title">網頁設計</div><p>讓 AI 幫你打造個人網站</p></div>
+      <div class="week"><div class="num">TOPIC 02</div><div class="title">AI 開發</div><p>從一句需求到一個專案</p></div>
+      <div class="week"><div class="num">TOPIC 03</div><div class="title">開發者必修</div><p>Linux 與開發環境</p></div>
+      <div class="week"><div class="num">TOPIC 04</div><div class="title">IoT 入門</div><p>使用 ESP32 晶片打造自己的 IoT 裝置</p></div>
+      <div class="week"><div class="num">TOPIC 05</div><div class="title">玩轉 AI</div><p>AI 視覺辨識以及自部署 LLM</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head reveal">
+      <div class="tag">07 — FEE</div>
+      <h2>社費</h2>
+    </div>
+    <div class="fee reveal">300<small>元</small></div>
+    <div class="grid3 reveal">
+      <div class="prep"><div class="num">01</div><div class="title">冷氣</div></div>
+      <div class="prep"><div class="num">02</div><div class="title">飲料</div></div>
+      <div class="prep"><div class="num">03</div><div class="title">其他雜費</div></div>
+    </div>
+  </section>
+
+  <section class="form">
+    <div class="head reveal">
+      <div class="tag">08 — FORM</div>
+      <h2>課前表單</h2>
+    </div>
+    <div class="qr big reveal" data-src="assets/qrcode_forms.gle.png">FORM QR</div>
+  </section>
+
+  <section>
+    <div class="head reveal">
+      <div class="tag">09 — PREPARATION</div>
+      <h2>課前準備</h2>
+    </div>
+    <div class="grid3 reveal">
+      <div class="prep"><div class="num">01</div><div class="title">筆電</div><p>非必要</p></div>
+      <div class="prep"><div class="num">02</div><div class="title">帳號</div><p>註冊 Discord 與 GitHub</p></div>
+      <div class="prep"><div class="num">03</div><div class="title">好學的心</div></div>
+    </div>
+  </section>
+
+  <section class="end">
+    <img class="logo reveal" src="assets/fscs-logo.jpg" alt="FsCs">
+    <h1 class="reveal">歡迎你的加入</h1>
+    <div class="tag reveal" style="color: var(--muted)">鳳中電資 · FSCS</div>
+  </section>
+
+</main>
+<nav id="nav"></nav>
+<div class="counter" id="counter"></div>
+
+<script>
+  const main = document.getElementById('main');
+  const sections = [...document.querySelectorAll('section')];
+  const nav = document.getElementById('nav');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  // QR 圖片：把檔案放到 assets/ 即自動顯示
+  document.querySelectorAll('.qr[data-src]').forEach(box => {
+    const img = new Image();
+    img.onload = () => { box.textContent = ''; box.appendChild(img); };
+    img.src = box.dataset.src;
+  });
+
+  sections.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', '第 ' + (i + 1) + ' 頁');
+    b.onclick = () => go(i);
+    nav.appendChild(b);
+  });
+
+  function go(i) {
+    i = Math.max(0, Math.min(sections.length - 1, i));
+    main.scrollTo({ top: sections[i].offsetTop });
+  }
+
+  function setActive(i) {
+    current = i;
+    sections.forEach((s, j) => s.classList.toggle('active', j === i));
+    [...nav.children].forEach((b, j) => b.classList.toggle('on', j === i));
+    counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(sections.length).padStart(2, '0');
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(sections.indexOf(e.target)); });
+  }, { root: main, threshold: 0.6 });
+  sections.forEach(s => io.observe(s));
+
+  document.addEventListener('keydown', e => {
+    if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(current + 1); }
+    if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(current - 1); }
+    if (e.key === 'Home') go(0);
+    if (e.key === 'End') go(sections.length - 1);
+  });
+
+  setActive(0);
+</script>
+</body>
+</html>
