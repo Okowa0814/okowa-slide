@@ -88,7 +88,7 @@
   .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4vw; }
   .social { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
   .qr {
-    width: 100%; max-width: 340px; aspect-ratio: 1; border-radius: 20px;
+    width: 100%; max-width: 440px; aspect-ratio: 1; border-radius: 20px;
     border: 1px dashed var(--line); background: var(--card);
     display: flex; align-items: center; justify-content: center;
     font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--muted); overflow: hidden;
@@ -127,13 +127,14 @@
   .fee small { font-family: 'Noto Sans TC', sans-serif; font-size: .3em; font-weight: 300; color: var(--muted); }
 
   /* form */
-  .form { align-items: center; text-align: center; }
+  .form { align-items: center; text-align: center; padding-top: 5vh; padding-bottom: 5vh; gap: 3vh; }
   .form .head { align-items: center; }
-  .qr.big { width: min(56vh, 80vw); max-width: none; }
+  .qr.big { width: min(62vh, 80vw); max-width: none; }
 
   /* end */
   .end { align-items: center; text-align: center; }
   .end .logo { width: min(20vw, 260px); box-shadow: none; }
+  .end h2 { text-wrap: balance; line-height: 1.5; }
 
   /* nav */
   nav { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 14px; z-index: 10; }
@@ -200,10 +201,15 @@
   </section>
 
   <section>
+    <div class="tag reveal">03 — STAFF</div>
+    <h1 class="reveal">幹部介紹</h1>
+  </section>
+
+  <section>
     <div class="person flip">
       <img class="photo reveal" src="assets/teach.jpg" alt="教學">
       <div class="person-text reveal">
-        <div class="tag">03 — TEACHER</div>
+        <div class="tag">04 — TEACHER</div>
         <div class="person-title">
           <h2>教學</h2>
           <div class="person-name">歐洵愷</div>
@@ -225,7 +231,7 @@
 
   <section>
     <div class="head reveal">
-      <div class="tag">04 — COMMUNITY</div>
+      <div class="tag">05 — COMMUNITY</div>
       <h2>加入社群</h2>
     </div>
     <div class="grid3 reveal">
@@ -249,33 +255,33 @@
 
   <section>
     <div class="head reveal">
-      <div class="tag">05 — CLASSES</div>
+      <div class="tag">06 — CLASSES</div>
       <h2>分班介紹</h2>
     </div>
     <div class="grid2 reveal">
       <div class="card">
         <div class="code" style="color: var(--green)">CLASS A</div>
         <div class="title">基礎班</div>
-        <p>零基礎入門，從 C++ 開始學程式。</p>
+        <p>講師：教學 歐洵愷</p>
       </div>
       <div class="card">
         <div class="code" style="color: var(--purple)">CLASS B</div>
         <div class="title">進階班</div>
-        <p></p>
+        <p>講師：社長 高大崴</p>
       </div>
     </div>
   </section>
 
   <section>
     <div class="head reveal">
-      <div class="tag">06 — SCHEDULE</div>
+      <div class="tag">07 — SCHEDULE</div>
       <h2>基礎班課程安排</h2>
     </div>
     <div class="grid3 weeks reveal">
       <div class="week"><div class="num">WEEK 01</div><div class="title">介紹・Hello World</div></div>
       <div class="week"><div class="num">WEEK 02</div><div class="title">變數・輸出輸入</div></div>
       <div class="week"><div class="num">WEEK 03</div><div class="title">四則運算・if else</div></div>
-      <div class="week"><div class="num">WEEK 04</div><div class="title">陣列（～可變）・迴圈</div></div>
+      <div class="week"><div class="num">WEEK 04</div><div class="title">陣列（vector）・迴圈</div></div>
       <div class="week"><div class="num">WEEK 05</div><div class="title">函式・遞迴</div></div>
       <div class="week"><div class="num">WEEK 06</div><div class="title">排序</div></div>
     </div>
@@ -283,7 +289,7 @@
 
   <section>
     <div class="head reveal">
-      <div class="tag">06 — SCHEDULE</div>
+      <div class="tag">07 — SCHEDULE</div>
       <h2>進階班課程</h2>
     </div>
     <div class="grid3 weeks stagger reveal">
@@ -297,7 +303,7 @@
 
   <section>
     <div class="head reveal">
-      <div class="tag">07 — FEE</div>
+      <div class="tag">08 — FEE</div>
       <h2>社費</h2>
     </div>
     <div class="fee reveal">300<small>元</small></div>
@@ -310,7 +316,7 @@
 
   <section class="form">
     <div class="head reveal">
-      <div class="tag">08 — FORM</div>
+      <div class="tag">09 — FORM</div>
       <h2>課前表單</h2>
     </div>
     <div class="qr big reveal" data-src="assets/qrcode_forms.gle.png">FORM QR</div>
@@ -318,7 +324,7 @@
 
   <section>
     <div class="head reveal">
-      <div class="tag">09 — PREPARATION</div>
+      <div class="tag">10 — PREPARATION</div>
       <h2>課前準備</h2>
     </div>
     <div class="grid3 reveal">
@@ -332,6 +338,10 @@
     <img class="logo reveal" src="assets/fscs-logo.jpg" alt="FsCs">
     <h1 class="reveal">歡迎你的加入</h1>
     <div class="tag reveal" style="color: var(--muted)">鳳中電資 · FSCS</div>
+  </section>
+
+  <section class="end">
+    <h2 class="reveal">第七節在電腦教室<br>請各位下一節上課前填寫課前表單</h2>
   </section>
 
 </main>
