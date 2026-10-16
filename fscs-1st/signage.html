@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鳳中電資</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f17;
+    --line: #2a2d40;
+    --ink: #eef0f5;
+    --muted: #a9aec0;
+    --purple: oklch(0.78 0.13 290);
+    --green: oklch(0.76 0.14 150);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; font-family: 'Noto Sans TC', sans-serif; color: var(--ink); cursor: none; }
+  a { color: var(--purple); }
+  a:hover { color: var(--ink); }
+
+  /* 固定 1080×1920 直式畫布，自動縮放填滿螢幕 */
+  .screen {
+    width: 1080px; height: 1920px; flex: none;
+    transform-origin: center;
+    transform: scale(0.28);
+    display: flex; flex-direction: column;
+    padding: 120px 80px 110px;
+    position: relative;
+    background:
+      radial-gradient(900px 700px at 50% 30%, rgba(120, 90, 255, .10), transparent 70%),
+      var(--bg);
+  }
+
+  .top { display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 36px; letter-spacing: .3em; color: var(--muted); }
+  .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 var(--green); animation: pulse 2.4s infinite; }
+
+  .brand { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 80px; }
+  .logo { width: 580px; height: 580px; border-radius: 52px; box-shadow: 0 50px 140px rgba(120, 90, 255, .22); }
+  h1 { margin: 0; font-size: 210px; font-weight: 900; letter-spacing: .08em; line-height: 1; }
+  .en { font-family: 'JetBrains Mono', monospace; font-size: 40px; letter-spacing: .5em; color: var(--purple); margin-top: -40px; }
+
+  .direction { border-top: 1px solid var(--line); padding-top: 90px; display: flex; align-items: center; gap: 60px; }
+  .arrow { width: 240px; height: 240px; flex: none; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; animation: nudge 2s ease-in-out infinite; }
+  .arrow svg { width: 140px; height: 140px; }
+  .dir-text { display: flex; flex-direction: column; gap: 18px; }
+  .dir-text .label { font-family: 'JetBrains Mono', monospace; font-size: 34px; letter-spacing: .3em; color: var(--muted); }
+  .dir-text .main { white-space: nowrap; font-size: 100px; font-weight: 700; line-height: 1.1; }
+
+  @keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-28px); } }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 oklch(0.76 0.14 150 / .6); } 70% { box-shadow: 0 0 0 18px oklch(0.76 0.14 150 / 0); } 100% { box-shadow: 0 0 0 0 oklch(0.76 0.14 150 / 0); } }
+</style>
+</head>
+<body>
+  <div class="screen" id="screen">
+    <div class="top">
+      <span>FSCS</span>
+      <span class="dot"></span>
+    </div>
+
+    <div class="brand">
+      <img class="logo" src="assets/fscs-logo.jpg" alt="FsCs">
+      <h1>鳳中電資</h1>
+      <div class="en">FSCS</div>
+    </div>
+
+    <div class="direction">
+      <div class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0e0f17" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 5l-7 7 7 7"></path></svg>
+      </div>
+      <div class="dir-text">
+        <div class="label">THIS WAY</div>
+        <div class="main">在左手邊教室</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const screen = document.getElementById('screen');
+  function fit() {
+    const w = document.documentElement.clientWidth || innerWidth;
+    const h = document.documentElement.clientHeight || innerHeight;
+    if (!w || !h) return;
+    screen.style.transform = 'scale(' + Math.min(w / 1080, h / 1920) + ')';
+  }
+  addEventListener('resize', fit);
+  addEventListener('load', fit);
+  new ResizeObserver(fit).observe(document.documentElement);
+  requestAnimationFrame(fit);
+  setInterval(fit, 1000);
+</script>
+</body>
+</html>
