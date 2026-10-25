@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用 AI 製作你的個人網站｜電資社進階班 第一堂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F5F2; --ink:#17171A; --mute:#6B6A66; --line:#DEDBD4; --soft:#EDEBE6;
+  --accent:oklch(0.5 0.1 255); --dark:#141518;
+  --serif:'Noto Sans TC',sans-serif; --sans:'Noto Sans TC',sans-serif; --mono:'JetBrains Mono','Noto Sans TC',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0E0F11;overflow:hidden;font-family:var(--sans);color:var(--ink)}
+a{color:var(--accent)} a:hover{color:var(--ink)}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:1920px;height:1080px;position:relative;flex:none;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--bg);padding:120px 160px 140px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease}
+.slide.active{opacity:1;visibility:visible}
+.slide.dark{background:var(--dark);color:#F2F1EE}
+.slide.dark .mute{color:#9C9B97}
+/* chrome */
+.meta{position:absolute;left:160px;right:160px;width:1600px;bottom:64px;white-space:nowrap;display:flex;justify-content:space-between;font-size:22px;letter-spacing:.08em;color:var(--mute)}
+.dark .meta{color:#7E7D79}
+.kicker{font-family:var(--mono);font-size:24px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin-bottom:36px}
+.dark .kicker{color:oklch(0.75 0.09 255)}
+h1,h2{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:.01em}
+h1{font-size:128px;line-height:1.18}
+h2{font-size:76px;line-height:1.25}
+.lead{font-size:40px;line-height:1.7;font-weight:400;max-width:1400px;text-wrap:pretty}
+.mute{color:var(--mute)}
+.rule{height:1px;background:var(--line);margin:56px 0}
+.dark .rule{background:#2C2D31}
+/* section divider */
+.divider{justify-content:center}
+.divider .num{font-family:var(--serif);font-size:260px;line-height:1;color:oklch(0.75 0.09 255);margin-bottom:24px;font-weight:500}
+.divider h2{font-size:104px}
+.divider .lead{margin-top:40px;color:#B9B8B3}
+/* lists */
+.steps{display:grid;grid-template-columns:auto auto auto;justify-content:space-between;grid-template-rows:auto auto;grid-auto-flow:column;column-gap:40px;margin-top:auto}
+.steps div{border-top:1px solid var(--ink);padding:32px 0 56px;font-size:30px;line-height:1.5;font-weight:500;white-space:nowrap}
+.steps div span{display:block;font-family:var(--mono);font-size:24px;color:var(--accent);margin-bottom:20px}
+.table{display:grid;border-top:1px solid var(--ink);margin-top:56px}
+.table .row{display:grid;border-bottom:1px solid var(--line);align-items:baseline}
+.table .row > div{padding:28px 24px 28px 0;font-size:34px;line-height:1.5}
+.table .head > div{font-size:22px;letter-spacing:.1em;color:var(--mute);padding:20px 0}
+.table .row > div:first-child{font-weight:700}
+.code{font-family:var(--mono),var(--sans);background:#fff;border:1px solid var(--line);border-radius:6px;padding:40px 48px;font-size:26px;line-height:1.65;white-space:pre-wrap;color:#2A2A2E}
+.code b{color:var(--accent);font-weight:500}
+.label{font-size:22px;letter-spacing:.12em;color:var(--mute);margin-bottom:20px}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:96px}
+.quote{font-family:var(--serif);font-size:72px;line-height:1.55;font-weight:500;max-width:1500px;text-wrap:pretty}
+.quote em{font-style:normal;border-bottom:3px solid var(--accent)}
+.dark .quote em{border-color:oklch(0.75 0.09 255)}
+.tags{display:flex;flex-wrap:wrap;gap:16px}
+.tags span{border:1px solid var(--line);border-radius:999px;padding:12px 28px;font-size:30px;background:#fff}
+.plan{display:grid;grid-template-columns:420px 1fr;border-top:1px solid var(--ink)}
+.plan > div{border-bottom:1px solid var(--line);padding:30px 0;font-size:34px;line-height:1.5}
+.plan > div:nth-child(odd){font-weight:700}
+.blank{border-bottom:1px solid var(--ink);display:inline-block;width:720px;height:1.2em}
+.note{display:flex;gap:28px;align-items:baseline;font-size:32px;line-height:1.6;border-left:0;padding-top:32px;border-top:1px solid var(--line)}
+.note strong{flex:none;white-space:nowrap;font-size:22px;letter-spacing:.12em;color:var(--accent);font-weight:500}
+.checks{display:flex;flex-direction:column;border-top:1px solid var(--ink);margin-top:48px;flex:1}
+.checks div{flex:1;display:grid;grid-template-columns:100px 520px 1fr;align-items:center;border-bottom:1px solid var(--line)}
+.checks i{font-style:normal;font-family:var(--mono);font-size:26px;color:var(--accent)}
+.checks b{font-size:42px}
+.checks p{margin:0;font-size:36px;line-height:1.5;color:var(--mute)}
+/* controls */
+#nav{position:fixed;right:24px;top:50%;transform:translateY(-50%);flex-direction:column;display:flex;gap:8px;z-index:5;opacity:0;transition:opacity .2s}
+#nav:hover{opacity:1}
+#nav button{width:44px;height:44px;border-radius:50%;border:1px solid #444;background:#1B1C1F;color:#ddd;font-size:18px;cursor:pointer}
+#nav button:hover{background:#2A2B2F}
+@media print{
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static;display:block}
+  #deck{transform:none!important;width:auto;height:auto}
+  .slide{position:relative;opacity:1;visibility:visible;width:1920px;height:1080px;page-break-after:always;transition:none}
+  #nav{display:none}
+  @page{size:1920px 1080px;margin:0}
+}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="deck">
+
+<section class="slide dark" data-label="封面" style="justify-content:space-between">
+  <div class="kicker">電資社進階班｜第一堂課講義</div>
+  <div>
+    <h1>用 AI 製作<br>你的個人網站</h1>
+    <div class="rule" style="width:160px;background:oklch(0.75 0.09 255);height:2px"></div>
+  </div>
+  <div></div>
+</section>
+
+<section class="slide" data-label="今天的課程" style="justify-content:center">
+  <div class="kicker">今天的課程</div>
+  <p class="quote" style="margin:0">今天的課程不是背程式碼，而是學會<em>把想法說清楚</em>、<em>檢查 AI 的成果</em>，再<em>一步步改善它</em>。</p>
+</section>
+
+<section class="slide dark divider" data-label="先看看範例">
+  <div class="num">二</div>
+  <h2>先看看範例</h2>
+  <p class="lead">觀察展示的網站</p>
+</section>
+
+<section class="slide dark divider" data-label="什麼是 Prompt">
+  <div class="num">三</div>
+  <h2>什麼是 Prompt？</h2>
+</section>
+
+<section class="slide" data-label="Prompt 定義" style="justify-content:center">
+  <div class="kicker">Definition</div>
+  <h2 style="font-size:96px">Prompt（提示詞）</h2>
+  <p class="lead" style="font-size:48px;margin:48px 0 0;max-width:1500px">是你提供給 AI 的指令或需求。描述得越清楚，AI 就越容易產生符合期待的結果。</p>
+  <div class="rule"></div>
+  <p class="lead mute" style="margin:0">不過，Prompt 寫得很完整也不代表結果一定正確，所以仍然需要檢查與修改。</p>
+</section>
+
+<section class="slide" data-label="把需求拆成幾個部分">
+  <div class="kicker">Prompt 結構</div>
+  <h2>把需求拆成幾個部分</h2>
+  <div class="table">
+    <div class="row head" style="grid-template-columns:380px 1fr 1fr"><div>部分</div><div>要思考的問題</div><div>範例</div></div>
+    <div class="row" style="grid-template-columns:380px 1fr 1fr"><div>角色／任務</div><div>要AI幫我做什麼？</div><div class="mute">幫我製作一個個人網站</div></div>
+    <div class="row" style="grid-template-columns:380px 1fr 1fr"><div>網站內容</div><div>網頁要放什麼？</div><div class="mute">自我介紹、興趣、作品</div></div>
+    <div class="row" style="grid-template-columns:380px 1fr 1fr"><div>視覺風格</div><div>希望看起來如何？</div><div class="mute">深色背景、簡潔、科技感</div></div>
+    <div class="row" style="grid-template-columns:380px 1fr 1fr"><div>版面配置</div><div>內容要怎麼排列？</div><div class="mute">上方導覽列、下方三個內容區塊</div></div>
+    <div class="row" style="grid-template-columns:380px 1fr 1fr"><div>互動功能</div><div>使用者可以做什麼？</div><div class="mute">點擊導覽列跳到不同區塊</div></div>
+  </div>
+</section>
+
+<section class="slide" data-label="比較兩種 Prompt" style="padding-top:80px;padding-bottom:130px">
+  <div class="kicker" style="margin-bottom:20px">比較</div>
+  <h2 style="font-size:60px">比較兩種 Prompt</h2>
+  <div style="display:grid;grid-template-columns:1fr 640px;gap:120px;margin-top:32px;flex:1;min-height:0">
+    <div style="display:flex;flex-direction:column">
+      <div class="label">太簡短的寫法</div>
+      <div class="code" style="font-size:40px;padding:48px 56px">幫我做一個好看的個人網站。</div>
+      <div style="margin-top:auto;border-top:1px solid var(--ink);padding-top:32px">
+        <div class="label" style="color:var(--accent)">想一想</div>
+        <p style="font-family:var(--serif);font-size:52px;line-height:1.5;margin:0;font-weight:500">上面第二個 Prompt 多提供了<br>哪些資訊？</p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;min-height:0">
+      <div class="label">更清楚的寫法</div>
+      <div class="code" style="font-size:19px;line-height:1.4;padding:22px 40px;flex:1">請幫我製作一個個人介紹網站。
+
+<b>網站內容：</b>
+1. 首頁：顯示我的暱稱或一句自我介紹
+2. 關於我：介紹我
+3. 我的作品：展示我做過的專案
+4. 聯絡方式：放上我希望公開的聯絡連結
+
+<b>設計風格：</b>
+- 深色背景，搭配藍紫色點綴
+- 版面簡潔、有科技感
+- 使用清楚的標題與卡片區塊
+- 支援手機與電腦螢幕
+
+<b>功能要求：</b>
+- 導覽列可以跳到對應區塊
+- 按鈕要有清楚的互動效果
+
+請先產生可以直接預覽的完整網站。
+如果需要提供程式碼，請說明每個檔案應該如何使用。</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide dark divider" data-label="規劃我的網站">
+  <div class="num">四</div>
+  <h2>動手前：規劃我的網站</h2>
+  <p class="lead">先花幾分鐘想清楚自己要做什麼，不用一次把所有細節決定好。</p>
+</section>
+
+<section class="slide" data-label="規劃清單" style="padding-top:100px">
+  <div class="kicker">規劃清單</div>
+  <h2 style="font-size:64px;margin-bottom:48px">規劃我的網站</h2>
+  <div class="plan">
+    <div>我的網站想介紹</div><div class="mute">例如：自己、興趣、攝影作品、遊戲攻略、讀書紀錄、社團專案、個人作品集。</div>
+    <div>網站內容</div><div><div class="tags"><span>首頁</span><span>自我介紹</span><span>我的社群</span><span>興趣／作品</span><span>其他</span></div></div>
+    <div>設計風格</div><div><div class="tags"><span>簡約</span><span>科技感</span><span>可愛</span><span>俐落專業</span><span>遊戲風格</span></div></div>
+    <div>我想使用的主要顏色</div><div><span class="blank"></span></div>
+    <div>我希望網站給人的感覺是</div><div><span class="blank"></span></div>
+  </div>
+</section>
+
+<section class="slide dark divider" data-label="開始使用 AI 製作網站">
+  <div class="num">五</div>
+  <h2>開始使用 AI 製作網站</h2>
+  <p class="lead">描述需求：把第四部分的規劃整理成 Prompt，貼到 AI 對話中。</p>
+</section>
+
+<section class="slide" data-label="描述需求範例">
+  <div class="kicker">範例</div>
+  <h2>描述需求</h2>
+  <p class="lead mute" style="margin:24px 0 32px">把第四部分的規劃整理成 Prompt，貼到 AI 對話中。</p>
+  <div class="code" style="font-size:26px;line-height:1.7;padding:40px 56px">請扮演資深前端工程師與 UI/UX 設計師，為我製作一個個人網站。
+
+<b>我的網站想介紹:</b>
+
+<b>網站內容:</b>
+
+<b>設計風格：</b></div>
+</section>
+
+<section class="slide dark divider" data-label="讓 AI 修改">
+  <div class="num">六</div>
+  <h2>讓 AI 修改，而不是每次重做</h2>
+  <p class="lead">第一版不完美很正常。實際製作網站時，常常需要反覆調整。</p>
+</section>
+
+<section class="slide" data-label="修改時可以使用的 Prompt" style="padding-top:90px">
+  <div class="kicker" style="margin-bottom:20px">修改 Prompt</div>
+  <h2 style="font-size:64px">修改時可以使用的 Prompt</h2>
+  <div class="code" style="margin-top:36px;font-size:28px;line-height:1.6;padding:36px 56px">請在保留目前網站內容與既有功能的前提下，修改以下項目：
+
+<b>-</b> 將主色調改成深藍色與紫色
+<b>-</b> 增加卡片之間的間距
+<b>-</b> 讓標題更清楚，提升文字可讀性
+<b>-</b> 確保手機版不會出現水平溢出
+
+請只修改必要的部分。
+完成後，請列出你改了哪些地方，以及我應該如何測試。</div>
+  <div class="note" style="margin-top:32px;font-size:28px"><strong>小技巧</strong><span>一次先改一到三件事。<span class="mute">如果一次要求改太多，會比較難判斷是哪個修改造成問題。</span></span></div>
+</section>
+
+<section class="slide dark divider" data-label="遇到問題時怎麼辦">
+  <div class="num">七</div>
+  <h2>遇到問題時怎麼辦？</h2>
+  <p class="lead">不要只對 AI 說「壞掉了，幫我修好」。提供越具體的資訊，越容易找到問題。</p>
+</section>
+
+<section class="slide" data-label="可以依序提供">
+  <div class="kicker">回報問題</div>
+  <h2>可以依序提供</h2>
+  <div class="checks">
+    <div><i>01</i><b>預期結果</b><p>我原本希望發生什麼？</p></div>
+    <div><i>02</i><b>實際結果</b><p>現在發生了什麼？</p></div>
+    <div><i>03</i><b>操作步驟</b><p>我做了哪些事？</p></div>
+    <div><i>04</i><b>錯誤訊息</b><p>畫面或工具顯示了什麼？</p></div>
+    <div><i>05</i><b>相關程式碼或截圖</b><p>只提供排查所需的內容，記得遮住個人資料與金鑰。</p></div>
+  </div>
+</section>
+
+<section class="slide" data-label="除錯範例 Prompt" style="justify-content:center">
+  <div class="kicker">範例 Prompt</div>
+  <div class="code" style="font-size:38px;line-height:1.9;padding:64px 72px">我希望點擊「關於我」後，頁面能移動到自我介紹區塊。
+但目前點擊後沒有反應。
+請先分析可能的原因，再提出修正方式。
+請說明你修改了什麼，以及我應該如何測試。</div>
+</section>
+
+<section class="slide dark" data-label="今天的目標" style="justify-content:center">
+  <div class="kicker">今天的目標</div>
+  <p class="quote" style="margin:0;font-size:68px">今天的目標不是做出全世界最厲害的網站，而是完成一個<em>由你提出想法</em>、<em>運用 AI 製作</em>，並且<em>親自檢查與改善</em>的作品。</p>
+</section>
+
+</div></div>
+<div id="nav"><button id="prev" aria-label="上一頁">‹</button><button id="next" aria-label="下一頁">›</button></div>
+
+<script>
+(function(){
+  const deck=document.getElementById('deck');
+  const slides=[...deck.querySelectorAll('.slide')];
+  const total=slides.length;
+  slides.forEach((s,i)=>{
+    const m=document.createElement('div');m.className='meta';
+    m.innerHTML='<span>電資社進階班｜用 AI 製作你的個人網站</span><span>'+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</span>';
+    s.appendChild(m);
+  });
+  let cur=Math.min(Math.max(parseInt(location.hash.slice(1))-1||0,0),total-1);
+  function show(n){
+    cur=Math.min(Math.max(n,0),total-1);
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    history.replaceState(null,'','#'+(cur+1));
+  }
+  function fit(){
+    const s=Math.min(innerWidth/1920,innerHeight/1080);
+    deck.style.transform='scale('+s+')';
+  }
+  addEventListener('resize',fit);
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(cur+1)}
+    if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(cur-1)}
+    if(e.key==='Home')show(0);
+    if(e.key==='End')show(total-1);
+    if(e.key==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  document.getElementById('next').onclick=()=>show(cur+1);
+  let tx=null;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(cur+(d<0?1:-1));tx=null});
+  fit();show(cur);
+})();
+</script>
+</body>
+</html>

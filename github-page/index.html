@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>把網站放上網路：GitHub Pages｜電資社進階班 第二堂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F5F2; --ink:#17171A; --mute:#6B6A66; --line:#DEDBD4;
+  --accent:oklch(0.5 0.1 255); --accent-l:oklch(0.75 0.09 255); --dark:#141518;
+  --serif:'Noto Sans TC',sans-serif; --sans:'Noto Sans TC',sans-serif; --mono:'JetBrains Mono','Noto Sans TC',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0E0F11;overflow:hidden;font-family:var(--sans);color:var(--ink)}
+a{color:var(--accent)} a:hover{color:var(--ink)}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:1920px;height:1080px;position:relative;flex:none;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--bg);padding:110px 160px 140px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s ease}
+.slide.active{opacity:1;visibility:visible}
+.slide.dark{background:var(--dark);color:#F2F1EE}
+.meta{position:absolute;left:160px;width:1600px;bottom:64px;white-space:nowrap;display:flex;justify-content:space-between;font-size:22px;letter-spacing:.08em;color:var(--mute)}
+.dark .meta{color:#7E7D79}
+.kicker{font-family:var(--mono);font-size:24px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin-bottom:28px}
+.dark .kicker{color:var(--accent-l)}
+h1,h2{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:.01em}
+h1{font-size:120px;line-height:1.18}
+h2{font-size:68px;line-height:1.25}
+.lead{font-size:38px;line-height:1.7;max-width:1450px;text-wrap:pretty}
+.mute{color:var(--mute)}
+.divider{justify-content:center}
+.divider .num{font-family:var(--serif);font-size:260px;line-height:1;color:var(--accent-l);margin-bottom:24px;font-weight:500}
+.divider h2{font-size:104px}
+.divider .lead{margin-top:40px;color:#B9B8B3}
+.steps{display:grid;grid-template-columns:auto auto auto;justify-content:space-between;grid-template-rows:auto auto;grid-auto-flow:column;column-gap:40px;margin-top:auto}
+.steps div{border-top:1px solid var(--ink);padding:32px 0 56px;font-size:32px;line-height:1.5;font-weight:500;white-space:nowrap}
+.steps div span{display:block;font-family:var(--mono);font-size:24px;color:var(--accent);margin-bottom:20px}
+.tl{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:40px;margin:auto 0;height:440px}
+.tl::before{content:'';position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:var(--ink)}
+.tl div{position:relative;display:grid;grid-template-rows:1fr 32px 1fr;row-gap:32px}
+.tl div::before{content:'';grid-row:2;width:32px;height:32px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);box-sizing:border-box;position:relative;z-index:1}
+.tl div:first-child::before{background:var(--accent);border-color:var(--accent)}
+.tl div > *{grid-row:3;align-self:start}
+.tl div:nth-child(odd) > *{grid-row:1;align-self:end}
+.tl div > span{display:none}
+.tl section,.tl b{display:block}
+.tl em{display:block;font-style:normal;font-family:var(--mono);font-size:24px;color:var(--accent);margin-bottom:16px}
+.tl p{margin:0;font-size:36px;line-height:1.5;font-weight:500;text-wrap:pretty}
+.rows{display:flex;flex-direction:column;border-top:1px solid var(--ink);margin-top:44px;flex:1}
+.rows > div{flex:1;display:grid;grid-template-columns:96px 480px 1fr;align-items:center;border-bottom:1px solid var(--line);gap:0 24px}
+.rows i{font-style:normal;font-family:var(--mono);font-size:26px;color:var(--accent)}
+.rows b{font-size:38px}
+.rows p{margin:0;font-size:32px;line-height:1.5;color:var(--mute)}
+.k{font-family:var(--mono);font-size:.85em;background:#fff;border:1px solid var(--line);border-radius:6px;padding:2px 12px;color:var(--ink);white-space:nowrap}
+.code{font-family:var(--mono),var(--sans);background:#fff;border:1px solid var(--line);border-radius:6px;padding:40px 48px;font-size:28px;line-height:1.7;white-space:pre-wrap;color:#2A2A2E}
+.code b{color:var(--accent);font-weight:500}
+.code .c{color:#9A9893}
+.label{font-size:22px;letter-spacing:.12em;color:var(--mute);margin-bottom:20px}
+.note{display:flex;gap:28px;align-items:baseline;font-size:30px;line-height:1.6;padding-top:28px;border-top:1px solid var(--line)}
+.note strong{flex:none;white-space:nowrap;font-size:22px;letter-spacing:.12em;color:var(--accent);font-weight:500}
+.table{display:grid;border-top:1px solid var(--ink);margin-top:48px}
+.table .row{display:grid;border-bottom:1px solid var(--line);align-items:baseline}
+.table .row > div{padding:26px 24px 26px 0;font-size:32px;line-height:1.5}
+.table .head > div{font-size:22px;letter-spacing:.1em;color:var(--mute);padding:18px 0}
+.table .row > div:first-child{font-weight:700}
+.quote{font-family:var(--serif);font-size:68px;line-height:1.55;font-weight:500;max-width:1500px;text-wrap:pretty}
+.quote em{font-style:normal;border-bottom:3px solid var(--accent-l)}
+.url{font-family:var(--mono);font-size:56px;color:var(--accent-l);margin-top:56px}
+.url span{color:#F2F1EE}
+#nav{position:fixed;right:24px;top:50%;transform:translateY(-50%);flex-direction:column;display:flex;gap:8px;z-index:5;opacity:0;transition:opacity .2s}
+#nav:hover{opacity:1}
+#nav button{width:44px;height:44px;border-radius:50%;border:1px solid #444;background:#1B1C1F;color:#ddd;font-size:18px;cursor:pointer}
+@media print{
+  html,body{overflow:visible;background:#fff}
+  #viewport{position:static;display:block}
+  #deck{transform:none!important;width:auto;height:auto}
+  .slide{position:relative;opacity:1;visibility:visible;width:1920px;height:1080px;page-break-after:always;transition:none}
+  #nav{display:none}
+  @page{size:1920px 1080px;margin:0}
+}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="deck">
+
+<section class="slide dark" data-label="封面" style="justify-content:space-between">
+  <div class="kicker">電資社進階班｜第二堂課講義</div>
+  <div>
+    <h1>把網站放上網路<br>GitHub Pages 部署</h1>
+    <div style="width:160px;height:2px;background:var(--accent-l);margin:56px 0"></div>
+  </div>
+  <div></div>
+</section>
+
+<section class="slide" data-label="今天要完成什麼">
+  <div class="kicker">今日目標</div>
+  <h2>今天要完成什麼？</h2>
+  <p class="lead mute" style="margin:28px 0 0">完成這堂課後，你將能夠：</p>
+  <div class="tl">
+    <div><p><em>01</em>註冊 GitHub 帳號</p></div>
+    <div><p><em>02</em>建立一個 Repository</p></div>
+    <div><p><em>03</em>上傳自己的網站檔案</p></div>
+    <div><p><em>04</em>開啟 GitHub Pages 完成部署</p></div>
+    <div><p><em>05</em>取得網址，並學會更新網站</p></div>
+  </div>
+</section>
+
+<section class="slide" data-label="GitHub 與 GitHub Pages" style="justify-content:center">
+  <div class="kicker">基本概念</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:96px">
+    <div>
+      <h2 style="font-size:80px">GitHub</h2>
+      <p class="lead" style="margin:36px 0 0">存放與管理程式碼的平台。每個專案放在一個 <span class="k">Repository</span>（簡稱 repo）裡。</p>
+    </div>
+    <div>
+      <h2 style="font-size:80px">GitHub Pages</h2>
+      <p class="lead" style="margin:36px 0 0">GitHub 提供的免費網站服務，可以把 repo 裡的 HTML、CSS、JS 直接變成一個公開網址。</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top:96px"><strong>注意</strong><span>GitHub Pages 只能放<b>靜態網頁</b>，不能執行 PHP、資料庫等需要伺服器的程式。</span></div>
+</section>
+
+<section class="slide" data-label="上傳前的檢查">
+  <div class="kicker">準備</div>
+  <h2>上傳前，先檢查你的檔案</h2>
+  <div class="rows">
+    <div><i>01</i><b>首頁叫 index.html</b><p>GitHub Pages 會自動打開這個檔案當作首頁。</p></div>
+    <div><i>02</i><b>放在最外層</b><p><span class="k">index.html</span> 不要藏在其他資料夾裡。</p></div>
+    <div><i>03</i><b>使用相對路徑</b><p>寫 <span class="k">images/me.jpg</span>，不要寫 <span class="k">C:\Users\...</span></p></div>
+    <div><i>04</i><b>注意大小寫</b><p><span class="k">Photo.JPG</span> 和 <span class="k">photo.jpg</span> 在網路上是不同檔案。</p></div>
+    <div><i>05</i><b>檔名用英文</b><p>避免中文與空格，可以用 <span class="k">-</span> 連接，例如 <span class="k">about-me.html</span></p></div>
+  </div>
+</section>
+
+<section class="slide dark divider" data-label="註冊帳號">
+  <div class="num">一</div>
+  <h2>註冊 GitHub 帳號</h2>
+  <p class="lead">已經有帳號的同學，可以直接登入。</p>
+</section>
+
+<section class="slide" data-label="註冊步驟">
+  <div class="kicker">Step 1 · Sign up</div>
+  <h2>註冊步驟</h2>
+  <div class="rows">
+    <div><i>01</i><b>前往 GitHub</b><p>打開 <span class="k">github.com</span>，點右上角 <span class="k">Sign up</span></p></div>
+    <div><i>02</i><b>填寫資料</b><p>輸入 Email、密碼、使用者名稱（Username）</p></div>
+    <div><i>03</i><b>完成驗證</b><p>依畫面指示完成真人驗證</p></div>
+    <div><i>04</i><b>收信確認</b><p>到信箱找 GitHub 寄來的驗證碼，輸入後完成註冊</p></div>
+  </div>
+  <div class="note" style="margin-top:36px"><strong>想清楚再取名</strong><span>Username 會出現在你的網址裡，建議使用英文小寫，簡短好記。</span></div>
+</section>
+
+<section class="slide dark divider" data-label="建立 Repository">
+  <div class="num">二</div>
+  <h2>建立 Repository</h2>
+  <p class="lead">Repository 就像一個專屬資料夾，用來放這個網站的所有檔案。</p>
+</section>
+
+<section class="slide" data-label="建立 repo 步驟">
+  <div class="kicker">Step 2 · New repository</div>
+  <h2>建立 repo 步驟</h2>
+  <div class="rows">
+    <div><i>01</i><b>新增 repo</b><p>點右上角 <span class="k">+</span> → <span class="k">New repository</span></p></div>
+    <div><i>02</i><b>取名稱</b><p>在 <span class="k">Repository name</span> 輸入英文名稱，例如 <span class="k">my-website</span></p></div>
+    <div><i>03</i><b>設為 Public</b><p>免費帳號需要公開，才能使用 GitHub Pages</p></div>
+    <div><i>04</i><b>建立</b><p>點 <span class="k">Create repository</span></p></div>
+  </div>
+</section>
+
+<section class="slide" data-label="repo 名稱與網址">
+  <div class="kicker">網址怎麼來？</div>
+  <h2>repo 名稱決定你的網址</h2>
+  <div class="table">
+    <div class="row head" style="grid-template-columns:620px 1fr"><div>repo 名稱</div><div>網站網址</div></div>
+    <div class="row" style="grid-template-columns:620px 1fr"><div style="font-family:var(--mono);font-weight:500">my-website</div><div style="font-family:var(--mono)">https://<b>username</b>.github.io/my-website/</div></div>
+    <div class="row" style="grid-template-columns:620px 1fr"><div style="font-family:var(--mono);font-weight:500"><b>username</b>.github.io</div><div style="font-family:var(--mono)">https://<b>username</b>.github.io/</div></div>
+  </div>
+  <p class="lead mute" style="margin-top:56px">把 <span class="k">username</span> 換成自己的帳號名稱。如果 repo 取名為 <span class="k">username.github.io</span>，網址會最短，適合當作個人主頁。</p>
+</section>
+
+<section class="slide dark divider" data-label="上傳檔案">
+  <div class="num">三</div>
+  <h2>上傳網站檔案</h2>
+  <p class="lead">不需要安裝任何軟體，直接在瀏覽器拖曳上傳。</p>
+</section>
+
+<section class="slide" data-label="上傳步驟">
+  <div class="kicker">Step 3 · Upload</div>
+  <div style="display:grid;grid-template-columns:1fr 640px;gap:96px;flex:1;min-height:0">
+    <div style="display:flex;flex-direction:column">
+      <h2>上傳步驟</h2>
+      <div class="rows" style="grid-template-columns:none">
+        <div style="grid-template-columns:80px 1fr"><i>01</i><p style="color:var(--ink)">在 repo 頁面點 <span class="k">Add file</span> → <span class="k">Upload files</span></p></div>
+        <div style="grid-template-columns:80px 1fr"><i>02</i><p style="color:var(--ink)">把網站的檔案與資料夾拖進畫面</p></div>
+        <div style="grid-template-columns:80px 1fr"><i>03</i><p style="color:var(--ink)">在下方簡短寫下這次做了什麼</p></div>
+        <div style="grid-template-columns:80px 1fr"><i>04</i><p style="color:var(--ink)">點 <span class="k">Commit changes</span> 完成上傳</p></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <div class="label">上傳後的結構應該像這樣</div>
+      <div class="code" style="font-size:30px;line-height:1.8">my-website/
+├── <b>index.html</b>   <span class="c">← 首頁</span>
+├── style.css
+├── script.js
+└── images/
+    └── me.jpg</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide dark divider" data-label="開啟 GitHub Pages">
+  <div class="num">四</div>
+  <h2>開啟 GitHub Pages</h2>
+  <p class="lead">檔案上傳好後，只要設定一次，網站就會上線。</p>
+</section>
+
+<section class="slide" data-label="部署設定">
+  <div class="kicker">Step 4 · Deploy</div>
+  <h2>部署設定</h2>
+  <div class="rows">
+    <div><i>01</i><b>打開設定</b><p>在 repo 上方點 <span class="k">Settings</span></p></div>
+    <div><i>02</i><b>找到 Pages</b><p>左側選單點 <span class="k">Pages</span></p></div>
+    <div><i>03</i><b>選擇來源</b><p><span class="k">Source</span> 選 <span class="k">Deploy from a branch</span></p></div>
+    <div><i>04</i><b>選擇分支</b><p><span class="k">Branch</span> 選 <span class="k">main</span>，資料夾選 <span class="k">/ (root)</span></p></div>
+    <div><i>05</i><b>儲存</b><p>點 <span class="k">Save</span>，等待部署完成</p></div>
+  </div>
+</section>
+
+<section class="slide" data-label="查看網站" style="justify-content:center">
+  <div class="kicker">完成部署</div>
+  <h2>打開你的網站</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:64px;margin-top:72px">
+    <div style="border-top:1px solid var(--ink);padding-top:32px"><div class="label" style="color:var(--accent)">等待</div><p class="lead" style="margin:0;font-size:34px">第一次部署通常需要一到數分鐘。</p></div>
+    <div style="border-top:1px solid var(--ink);padding-top:32px"><div class="label" style="color:var(--accent)">查看進度</div><p class="lead" style="margin:0;font-size:34px">點 repo 上方的 <span class="k">Actions</span>，綠色勾勾代表完成。</p></div>
+    <div style="border-top:1px solid var(--ink);padding-top:32px"><div class="label" style="color:var(--accent)">取得網址</div><p class="lead" style="margin:0;font-size:34px">回到 <span class="k">Settings</span> → <span class="k">Pages</span>，點 <span class="k">Visit site</span>。</p></div>
+  </div>
+</section>
+
+<section class="slide" data-label="更新網站">
+  <div class="kicker">之後想修改？</div>
+  <h2>更新網站</h2>
+  <div class="rows">
+    <div><i>01</i><b>修改檔案</b><p>在自己的電腦上改好網站，或請 AI 協助修改</p></div>
+    <div><i>02</i><b>重新上傳</b><p><span class="k">Add file</span> → <span class="k">Upload files</span>，上傳同名檔案會直接覆蓋</p></div>
+    <div><i>03</i><b>Commit</b><p>寫下這次改了什麼，點 <span class="k">Commit changes</span></p></div>
+    <div><i>04</i><b>自動部署</b><p>GitHub 會自動重新部署，不需要再設定一次</p></div>
+  </div>
+  <div class="note" style="margin-top:36px"><strong>看不到變化？</strong><span>等一兩分鐘，再按 <span class="k">Ctrl</span> + <span class="k">F5</span>（Mac 為 <span class="k">Cmd</span> + <span class="k">Shift</span> + <span class="k">R</span>）強制重新整理。</span></div>
+</section>
+
+<section class="slide dark divider" data-label="常見問題">
+  <div class="num">五</div>
+  <h2>常見問題</h2>
+  <p class="lead">網站沒有正常顯示時，先對照下一頁檢查。</p>
+</section>
+
+<section class="slide" data-label="問題排查">
+  <div class="kicker">Troubleshooting</div>
+  <h2>問題排查</h2>
+  <div class="table">
+    <div class="row head" style="grid-template-columns:440px 1fr"><div>狀況</div><div>可能的原因</div></div>
+    <div class="row" style="grid-template-columns:440px 1fr"><div>出現 404 頁面</div><div class="mute">首頁不是 <span class="k">index.html</span>、不在最外層，或還在部署中</div></div>
+    <div class="row" style="grid-template-columns:440px 1fr"><div>圖片沒有顯示</div><div class="mute">路徑錯誤、檔名大小寫不符，或忘了上傳圖片資料夾</div></div>
+    <div class="row" style="grid-template-columns:440px 1fr"><div>樣式全部消失</div><div class="mute">HTML 裡連結 CSS 的路徑錯誤</div></div>
+    <div class="row" style="grid-template-columns:440px 1fr"><div>修改後沒有變化</div><div class="mute">部署尚未完成，或瀏覽器還在顯示舊版本</div></div>
+  </div>
+</section>
+
+<section class="slide" data-label="安全提醒" style="justify-content:center">
+  <div class="kicker">安全提醒</div>
+  <p class="quote" style="margin:0">Public repo 裡的所有檔案，<em>任何人都看得到</em>。</p>
+  <p class="lead mute" style="margin-top:56px">不要上傳密碼、API 金鑰、身分證字號、住址或電話等個人資料。</p>
+</section>
+
+<section class="slide dark" data-label="今天的目標" style="justify-content:center">
+  <div class="kicker">今天的目標</div>
+  <p class="quote" style="margin:0">讓你的作品擁有<em>一個真正的網址</em>，可以分享給任何人。</p>
+  <div class="url">https://<span>username</span>.github.io/<span>my-website</span>/</div>
+</section>
+
+</div></div>
+<div id="nav"><button id="prev" aria-label="上一頁">‹</button><button id="next" aria-label="下一頁">›</button></div>
+
+<script>
+(function(){
+  const deck=document.getElementById('deck');
+  const slides=[...deck.querySelectorAll('.slide')];
+  const total=slides.length;
+  slides.forEach((s,i)=>{
+    const m=document.createElement('div');m.className='meta';
+    m.innerHTML='<span>電資社進階班｜GitHub Pages 部署</span><span>'+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</span>';
+    s.appendChild(m);
+  });
+  let cur=Math.min(Math.max(parseInt(location.hash.slice(1))-1||0,0),total-1);
+  function show(n){
+    cur=Math.min(Math.max(n,0),total-1);
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    history.replaceState(null,'','#'+(cur+1));
+  }
+  function fit(){deck.style.transform='scale('+Math.min(innerWidth/1920,innerHeight/1080)+')'}
+  addEventListener('resize',fit);
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(cur+1)}
+    if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(cur-1)}
+    if(e.key==='Home')show(0);
+    if(e.key==='End')show(total-1);
+    if(e.key==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  });
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  document.getElementById('next').onclick=()=>show(cur+1);
+  let tx=null;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(cur+(d<0?1:-1));tx=null});
+  fit();show(cur);
+})();
+</script>
+</body>
+</html>
