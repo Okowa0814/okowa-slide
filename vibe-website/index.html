@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>用 AI 製作你的個人網站｜電資社進階班 第一堂</title>
+<title>用 AI 製作你的個人網站</title>
 <meta name="date" content="2026-10-25">
 <meta name="tags" content="Vibe, Frontend">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,13 +87,11 @@ h2{font-size:76px;line-height:1.25}
 <body>
 <div id="viewport"><div id="deck">
 
-<section class="slide dark" data-label="封面" style="justify-content:space-between">
-  <div class="kicker">電資社進階班｜第一堂課講義</div>
+<section class="slide dark" data-label="封面" style="justify-content:center;padding-top:130px;padding-bottom:130px">
   <div>
     <h1>用 AI 製作<br>你的個人網站</h1>
-    <div class="rule" style="width:160px;background:oklch(0.75 0.09 255);height:2px"></div>
+    <div class="rule" style="width:160px;background:oklch(0.75 0.09 255);height:2px;margin-bottom:0"></div>
   </div>
-  <div></div>
 </section>
 
 <section class="slide" data-label="今天的課程" style="justify-content:center">
@@ -270,7 +268,7 @@ h2{font-size:76px;line-height:1.25}
   const total=slides.length;
   slides.forEach((s,i)=>{
     const m=document.createElement('div');m.className='meta';
-    m.innerHTML='<span>電資社進階班｜用 AI 製作你的個人網站</span><span>'+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</span>';
+    m.innerHTML='<span>用 AI 製作你的個人網站</span><span>'+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</span>';
     s.appendChild(m);
   });
   let cur=Math.min(Math.max(parseInt(location.hash.slice(1))-1||0,0),total-1);

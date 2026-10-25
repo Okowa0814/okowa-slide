@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>把網站放上網路：GitHub Pages｜電資社進階班 第二堂</title>
+<title>把網站放上網路：GitHub Pages</title>
 <meta name="date" content="2026-10-25">
 <meta name="tags" content="Github, Github Page, Frontend">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -86,13 +86,11 @@ h2{font-size:68px;line-height:1.25}
 <body>
 <div id="viewport"><div id="deck">
 
-<section class="slide dark" data-label="封面" style="justify-content:space-between">
-  <div class="kicker">電資社進階班｜第二堂課講義</div>
+<section class="slide dark" data-label="封面" style="justify-content:center;padding-top:125px;padding-bottom:125px">
   <div>
     <h1>把網站放上網路<br>GitHub Pages 部署</h1>
-    <div style="width:160px;height:2px;background:var(--accent-l);margin:56px 0"></div>
+    <div style="width:160px;height:2px;background:var(--accent-l);margin:56px 0 0"></div>
   </div>
-  <div></div>
 </section>
 
 <section class="slide" data-label="今天要完成什麼">
@@ -178,7 +176,7 @@ h2{font-size:68px;line-height:1.25}
     <div class="row" style="grid-template-columns:620px 1fr"><div style="font-family:var(--mono);font-weight:500">my-website</div><div style="font-family:var(--mono)">https://<b>username</b>.github.io/my-website/</div></div>
     <div class="row" style="grid-template-columns:620px 1fr"><div style="font-family:var(--mono);font-weight:500"><b>username</b>.github.io</div><div style="font-family:var(--mono)">https://<b>username</b>.github.io/</div></div>
   </div>
-  <p class="lead mute" style="margin-top:56px">把 <span class="k">username</span> 換成自己的帳號名稱。如果 repo 取名為 <span class="k">username.github.io</span>，網址會最短，適合當作個人主頁。</p>
+  <p class="lead mute" style="margin-top:56px">把 <span class="k">username</span> 換成自己的 GitHub 帳號名稱。若 repo 名稱剛好是 <span class="k">username.github.io</span>，網址就不用加上 repo 名稱，適合當作個人主頁。</p>
 </section>
 
 <section class="slide dark divider" data-label="上傳檔案">
@@ -291,7 +289,7 @@ h2{font-size:68px;line-height:1.25}
   const total=slides.length;
   slides.forEach((s,i)=>{
     const m=document.createElement('div');m.className='meta';
-    m.innerHTML='<span>電資社進階班｜GitHub Pages 部署</span><span>'+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</span>';
+    m.innerHTML='<span>GitHub Pages 部署</span><span>'+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</span>';
     s.appendChild(m);
   });
   let cur=Math.min(Math.max(parseInt(location.hash.slice(1))-1||0,0),total-1);
