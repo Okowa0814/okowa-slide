@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okowa Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Barlow:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#f2f2f3;color:#1d1f20;-webkit-font-smoothing:antialiased}
+a{color:#3d6488;text-decoration:none}a:hover{color:#1d1f20}
+*{box-sizing:border-box}
+input::placeholder{color:#8a8d91}
+::selection{background:#d5e0ec}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #5980a6;outline-offset:2px}
+
+.page{min-height:100vh;font-family:'Barlow','Noto Sans TC',sans-serif;background:#f2f2f3;background-image:linear-gradient(#e6e7e9 1px,transparent 1px),linear-gradient(90deg,#e6e7e9 1px,transparent 1px);background-size:48px 48px;background-position:-1px -1px}
+.wrap{max-width:1240px;margin:0 auto;padding:72px 32px 96px;display:flex;flex-direction:column;gap:48px}
+header{display:flex;flex-direction:column;gap:28px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5a5e63}
+.topbar a{color:#5a5e63}.topbar a:hover{color:#1d1f20}
+.rule{height:1px;background:#1d1f20}
+.hero{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px;align-items:flex-end}
+.hero-text{display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-family:'Barlow Condensed','Noto Sans TC',sans-serif;font-weight:500;font-size:clamp(64px,10vw,144px);line-height:.88;letter-spacing:-.01em;text-transform:uppercase}
+.subtitle{margin:0;font-family:'Noto Sans TC',sans-serif;font-size:16px;color:#5a5e63}
+.search{display:flex;align-items:center;gap:10px;width:min(320px,100%);height:44px;padding:0 14px;border:1px solid #1d1f20}
+.search span{font-family:'JetBrains Mono',monospace;font-size:13px;color:#5980a6}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:#1d1f20}
+
+.toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding-bottom:4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:32px;padding:0 14px;border:1px solid #c4c7cb;background:transparent;color:#1d1f20;border-radius:0;font-family:'Noto Sans TC',sans-serif;font-size:13px;cursor:pointer}
+.chip.on{border-color:#5980a6;background:#5980a6;color:#fff}
+.chip .cnt{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6}
+.segs{display:flex;border:1px solid #c4c7cb}
+.seg{height:32px;padding:0 14px;border:0;background:transparent;color:#5a5e63;font-family:'Noto Sans TC',sans-serif;font-size:13px;cursor:pointer}
+.seg.on{background:#1d1f20;color:#f2f2f3}
+
+.note{margin:0;font-family:'JetBrains Mono',monospace;font-size:12px;color:#5a5e63}
+.empty{margin:0;font-family:'Noto Sans TC',sans-serif;font-size:14px;color:#5a5e63}
+[hidden]{display:none!important}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:36px 32px}
+.card{position:relative;display:flex;flex-direction:column;gap:18px;padding:14px 14px 20px;border:1px solid #c4c7cb;color:#1d1f20;background:rgba(242,242,243,.9);transition:border-color .2s}
+.card:hover{border-color:#5980a6;color:#1d1f20}
+.plus{position:absolute;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:12px;color:#5980a6}
+.plus.tl{top:-7px;left:-5px}.plus.tr{top:-7px;right:-5px}.plus.bl{bottom:-6px;left:-5px}.plus.br{bottom:-6px;right:-5px}
+.preview{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid #d9dbde;background:repeating-linear-gradient(135deg,#eaebed 0 6px,#f2f2f3 6px 12px)}
+.preview .path{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8d91}
+.preview iframe{position:absolute;top:0;left:0;width:1600px;height:900px;border:0;transform-origin:0 0;pointer-events:none}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:#5a5e63}
+.meta .n{color:#5980a6}
+.info{display:flex;flex-direction:column;gap:8px}
+.title{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:21px;line-height:1.4;text-wrap:pretty}
+.sub{font-family:'Noto Sans TC',sans-serif;font-size:14px;color:#5a5e63}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.tag{padding:3px 8px;border:1px solid #c9d5e2;background:#e4ebf2;color:#2e4d6b;font-family:'Noto Sans TC',sans-serif;font-size:12px}
+
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;border-top:1px solid #c4c7cb;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8d91}
+</style>
+</head>
+<body>
+<div class="page">
+    <div class="wrap">
+        <header>
+            <div class="topbar">
+                <a id="repoLink" href="#"></a>
+                <span id="count">讀取中…</span>
+            </div>
+            <div class="rule"></div>
+            <div class="hero">
+                <div class="hero-text">
+                    <h1 id="title"></h1>
+                    <p class="subtitle" id="subtitle"></p>
+                </div>
+                <label class="search">
+                    <span>⌕</span>
+                    <input id="query" placeholder="搜尋簡報…" autocomplete="off">
+                </label>
+            </div>
+        </header>
+
+        <div class="toolbar">
+            <div class="chips" id="tags"></div>
+            <div class="segs" id="sorts"></div>
+        </div>
+
+        <p class="note" id="note" hidden></p>
+        <div class="grid" id="grid"></div>
+        <p class="empty" id="empty" hidden>沒有符合條件的簡報。</p>
+
+        <footer>
+            <span id="footerLeft"></span>
+            <span>Slide Index</span>
+        </footer>
+    </div>
+</div>
+
+<script>
+const CONFIG = {
+    title: 'Okowa Slides',
+    subtitle: '簡報與課程講義',
+    owner: 'Okowa0814',
+    repo: 'okowa-slide',
+    branch: 'main',
+    showPreviews: true,
+};
+
+const SORTS = [['new', '最新'], ['old', '最早'], ['name', '名稱']];
+const state = { decks: null, query: '', tag: '', sort: 'new', note: '' };
+const $ = id => document.getElementById(id);
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
+function fmt(d) {
+    if (!d) return '—';
+    const x = new Date(d);
+    if (isNaN(x)) return d;
+    return `${x.getFullYear()}.${String(x.getMonth() + 1).padStart(2, '0')}.${String(x.getDate()).padStart(2, '0')}`;
+}
+
+// decks.json is generated by .github/workflows/build-decks.yml
+async function load() {
+    const { owner, repo, branch } = CONFIG;
+    const urls = [
+        './decks.json',
+        `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/decks.json`,
+    ];
+    let lastErr = 'unreachable';
+    for (const url of urls) {
+        try {
+            const res = await fetch(url, { cache: 'no-cache' });
+            if (!res.ok) { lastErr = `decks.json ${res.status}`; continue; }
+            state.decks = await res.json();
+            state.note = '';
+            return render();
+        } catch (e) {
+            lastErr = e.message;
+        }
+    }
+    state.decks = [];
+    state.note = `無法讀取 decks.json（${lastErr}）`;
+    render();
+}
+
+function visibleDecks() {
+    const q = state.query.trim().toLowerCase();
+    const list = state.decks.filter(d =>
+        (!state.tag || d.tags.includes(state.tag)) &&
+        (!q || [d.title, d.sub, d.name, ...d.tags].join(' ').toLowerCase().includes(q))
+    );
+    const byDate = (a, b) => (a.date || '').localeCompare(b.date || '');
+    if (state.sort === 'name') list.sort((a, b) => a.title.localeCompare(b.title, 'zh-Hant'));
+    else if (state.sort === 'old') list.sort(byDate);
+    else list.sort((a, b) => byDate(b, a));
+    return list;
+}
+
+function cardHtml(d, num) {
+    const href = `./${encodeURIComponent(d.name)}/`;
+    const preview = CONFIG.showPreviews
+        ? `<iframe src="${esc(href)}" loading="lazy" tabindex="-1" scrolling="no"></iframe>`
+        : '';
+    return `
+        <a class="card" href="${esc(href)}">
+            <span class="plus tl">+</span><span class="plus tr">+</span>
+            <span class="plus bl">+</span><span class="plus br">+</span>
+            <div class="preview">
+                <span class="path">/${esc(d.name)}/</span>
+                ${preview}
+            </div>
+            <div class="meta"><span class="n">${num}</span><span>${esc(fmt(d.date))}</span></div>
+            <div class="info">
+                <span class="title">${esc(d.title)}</span>
+                ${d.sub ? `<span class="sub">${esc(d.sub)}</span>` : ''}
+            </div>
+            <div class="tags">${d.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+        </a>`;
+}
+
+function scalePreviews() {
+    for (const box of document.querySelectorAll('.preview')) {
+        const f = box.querySelector('iframe');
+        if (f) f.style.transform = `scale(${Math.max(0.1, box.clientWidth / 1600)})`;
+    }
+}
+
+function renderControls() {
+    const all = state.decks || [];
+    const tagSet = [...new Set(all.flatMap(d => d.tags))];
+    const countOf = v => v ? all.filter(d => d.tags.includes(v)).length : all.length;
+    $('tags').innerHTML = [{ label: '全部', v: '' }, ...tagSet.map(t => ({ label: t, v: t }))]
+        .map(t => `<button class="chip${state.tag === t.v ? ' on' : ''}" data-tag="${esc(t.v)}">${esc(t.label)}<span class="cnt">${countOf(t.v)}</span></button>`)
+        .join('');
+    $('sorts').innerHTML = SORTS
+        .map(([v, label]) => `<button class="seg${state.sort === v ? ' on' : ''}" data-sort="${v}">${label}</button>`)
+        .join('');
+}
+
+function render() {
+    const all = state.decks || [];
+    // numbering follows date order so it stays stable across sort modes
+    const byDate = [...all].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    const num = new Map(byDate.map((d, i) => [d.name, String(i + 1).padStart(2, '0')]));
+    const list = state.decks ? visibleDecks() : [];
+
+    $('count').textContent = state.decks ? `${String(all.length).padStart(2, '0')} 份簡報` : '讀取中…';
+    $('note').textContent = state.note;
+    $('note').hidden = !state.note;
+    $('grid').innerHTML = list.map(d => cardHtml(d, num.get(d.name))).join('');
+    $('empty').hidden = !(state.decks && all.length > 0 && list.length === 0);
+    renderControls();
+    scalePreviews();
+}
+
+function init() {
+    const { owner, repo, title, subtitle } = CONFIG;
+    document.title = title;
+    $('title').textContent = title;
+    $('subtitle').textContent = subtitle;
+    $('repoLink').textContent = `${owner}/${repo} ↗`;
+    $('repoLink').href = `https://github.com/${owner}/${repo}`;
+    $('footerLeft').textContent = `© ${new Date().getFullYear()} ${title}`;
+
+    $('query').addEventListener('input', e => { state.query = e.target.value; render(); });
+    $('tags').addEventListener('click', e => {
+        const b = e.target.closest('[data-tag]');
+        if (b) { state.tag = b.dataset.tag; render(); }
+    });
+    $('sorts').addEventListener('click', e => {
+        const b = e.target.closest('[data-sort]');
+        if (b) { state.sort = b.dataset.sort; render(); }
+    });
+    window.addEventListener('resize', scalePreviews);
+
+    render();
+    load();
+}
+
+init();
+</script>
+</body>
+</html>
