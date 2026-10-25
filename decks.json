@@ -1,0 +1,32 @@
+[
+    {
+        "name": "fscs-1st",
+        "title": "鳳中電資 第一節社課",
+        "sub": "",
+        "tags": [
+            "FSCS"
+        ],
+        "date": "2026-10-25"
+    },
+    {
+        "name": "github-page",
+        "title": "把網站放上網路：GitHub Pages",
+        "sub": "電資社進階班 第二堂",
+        "tags": [
+            "Github",
+            "Github Page",
+            "Frontend"
+        ],
+        "date": "2026-10-25"
+    },
+    {
+        "name": "vibe-website",
+        "title": "用 AI 製作你的個人網站",
+        "sub": "電資社進階班 第一堂",
+        "tags": [
+            "Vibe",
+            "Frontend"
+        ],
+        "date": "2026-10-25"
+    }
+]
